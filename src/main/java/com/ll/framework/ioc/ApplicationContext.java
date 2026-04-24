@@ -4,34 +4,25 @@ import com.ll.domain.testPost.testPost.repository.TestPostRepository;
 import com.ll.domain.testPost.testPost.service.TestFacadePostService;
 import com.ll.domain.testPost.testPost.service.TestPostService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ApplicationContext {
 
-    private final TestPostRepository testPostRepository;
-    private final TestPostService testPostService;
-    private final TestFacadePostService testFacadePostService;
+    private final Map<String, Object> beanRegistry = new HashMap<>();
 
     public ApplicationContext() {
-        testPostRepository = new TestPostRepository();
-        testPostService = new TestPostService(testPostRepository);
-
-        // ✅ 추가
-        testFacadePostService =
+        TestPostRepository testPostRepository = new TestPostRepository();
+        TestPostService testPostService = new TestPostService(testPostRepository);
+        TestFacadePostService testFacadePostService =
                 new TestFacadePostService(testPostService, testPostRepository);
+
+        beanRegistry.put("testPostRepository", testPostRepository);
+        beanRegistry.put("testPostService", testPostService);
+        beanRegistry.put("testFacadePostService", testFacadePostService);
     }
 
     public <T> T genBean(String beanName) {
-        if (beanName.equals("testPostService")) {
-            return (T) testPostService;
-        }
-
-        if (beanName.equals("testPostRepository")) {
-            return (T) testPostRepository;
-        }
-
-        if (beanName.equals("testFacadePostService")) {
-            return (T) testFacadePostService;
-        }
-
-        return null;
+        return (T) beanRegistry.get(beanName);
     }
 }
