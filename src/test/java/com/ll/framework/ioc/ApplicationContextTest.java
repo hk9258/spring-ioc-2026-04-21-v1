@@ -46,4 +46,13 @@ public class ApplicationContextTest {
         assertThat(testPostService1).isSameAs(testPostService2);
     }
 
+    @Test
+    @DisplayName("testPostRepository")
+    public void t4() {
+        TestPostRepository testPostRepository = applicationContext
+                .genBean("testPostRepository");
+
+        assertThat(testPostRepository).isNotNull();
+    }
+
 }
