@@ -5,16 +5,21 @@ import com.ll.domain.testPost.testPost.service.TestPostService;
 
 public class ApplicationContext {
 
+    private final TestPostRepository testPostRepository;
     private final TestPostService testPostService;
 
     public ApplicationContext() {
-        TestPostRepository testPostRepository = new TestPostRepository();
+        testPostRepository = new TestPostRepository();
         testPostService = new TestPostService(testPostRepository);
     }
 
     public <T> T genBean(String beanName) {
         if (beanName.equals("testPostService")) {
             return (T) testPostService;
+        }
+
+        if (beanName.equals("testPostRepository")) {
+            return (T) testPostRepository;
         }
 
         return null;
